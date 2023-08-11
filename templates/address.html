@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+
+
+{% block body%}
+<div class="container my-5">
+    <div class="row">
+        <h3>Welcome <span class="text-capitalize">{{request.user.first_name}}</span></h3>
+
+        <div class="col-sm-2 border-end">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="/profile/" class="btn ">Profile</a></li>
+                <li class="d-grid"><a href="/address/" class="btn btn-primary">Address</a></li>
+
+            </ul>
+        </div>
+
+        <div class="col-sm-8 offset-sm-1">
+            {% if add %}
+            <div class="row">
+                {% for i in add %}
+                <div class="col-sm-6">
+                    <div class="card m-2">
+                        <div class="card-body">
+                            <h3>Address {{forloop.counter}}</h3>
+                            <p>Name : {{i.name}}</p>
+                            <p>locality : {{i.locality}}</p>
+                            <p>city : {{i.city}}</p>
+                            <p>mobile : {{i.mobile}}</p>
+                            <p>zipcode : {{i.zipcode}}</p>
+                            <p>state : {{i.state}}</p>
+                            <p class="text-center"><a href="/update/{{i.id}}" class="btn btn-success">Update</a></p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="text-center text-primary fw-bold">
+                    <small>No Address Added <a href="/profile/" class="text-danger">Add Now</a></small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

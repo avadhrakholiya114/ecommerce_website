@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+
+{% block body%}
+<div class="container">
+    <div class="row my-3">
+        <div class="col-sm-6 offset-sm-3">
+            <h3>Update Address</h3>
+            <hr>
+            <!--            nonvalidate use for disable js validation-->
+            <form action="" method="post" class="shadow p-5" novalidate>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li
+                            class="alert alert-{{ message.tags }}">{{ message }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% csrf_token %}
+
+
+                {% for i in form %}
+                {{i.label_tag}}{{i}} <small class="text-danger">{{i.errors|striptags}}</small> <br>
+                {% endfor %}
+
+
+                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                </div>
+
+
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

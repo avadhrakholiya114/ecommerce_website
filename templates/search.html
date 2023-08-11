@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+
+
+
+{% block body%}
+
+<div class="container mt-5">
+    <div class="row row-cols-4 g-3">
+        {% if pro %}
+        {% for i in pro %}
+        <div class="col-md-3" >
+            <div class="card shadow-lg" style="width:18rem;">
+
+                <img src="/media/{{ i.product_images }}"   alt="" class="card-img-top" style="height:220px">
+                <div class="card-body">
+                    <h5 class="card-title">{{i.title}}</h5>
+
+                    <p class="card-text">Price - {{i.discounted_price}} |<span style="text-decoration: line-through;">Price : {{i.selling_price}} </span>  </p>
+                    <p class="card-text">Color : {{i.color}} |  Catagory  : {{i.catagory}}  </p>
+                    <a href="" class="btn btn-danger">Cart <i class="fa-solid fa-cart-shopping"></i></a>
+                    <a href="/detail/{{i.id}}" class="btn btn-primary m-3">Detail <i class="fa-solid fa-circle-info"></i></a>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+
+        <h4 class="text-center">Sorry,No product Found</h4>
+        {% endif %}
+
+    </div>
+</div>
+
+<br>
+<br>
+{% endblock %}

@@ -1,0 +1,10 @@
+ecomm/settings.py
+manage.py
+db.sqlite3
+ecomm/wsgi.py
+ecomm/__init__.py
+app/__init__.py
+app/admin.py
+app/apps.py
+app/tests.py
+app/migrations

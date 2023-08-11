@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+
+
+{% block body%}
+<div class="container my-5">
+    <div class="row">
+        <h3>Welcome <span class="text-capitalize">{{request.user.first_name}}</span></h3>
+
+        <div class="col-sm-2 border-end">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="/profile/" class="btn btn-primary">Profile</a></li>
+                <li class="d-grid"><a href="/address/" class="btn">Address</a></li>
+
+            </ul>
+        </div>
+
+        <div class="col-sm-8 offset-sm-1">
+            <form action="/profile/" method="post">
+                {% csrf_token %}
+                {% for i in form %}
+                {{i.label_tag}}{{i}} <small class="text-danger">{{i.errors|striptags}}</small> <br>
+                {% endfor %}
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <br>
+                <br>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
