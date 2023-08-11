@@ -332,7 +332,7 @@ def paymentdone(request):
     for c in data:
         orderplaced(user=user, Customer=cus, product=c.product, quantity=c.quantity, payment=pay).save()
         c.delete()
-    return redirect('/order/')
+    return redirect('/invoice/')
 
 
 @login_required(login_url="/login_user/")
@@ -343,6 +343,11 @@ def order(request):
 
     return render(request, 'order.html', {'order': order, 'ca': ca})
 
+import io
+from django.template.loader import render_to_string, get_template
+from django.core.mail import EmailMultiAlternatives
+from xhtml2pdf import pisa
+from io import BytesIO
 
 @login_required(login_url="/login_user/")
 def invoice(request):
@@ -358,19 +363,22 @@ def invoice(request):
     cus = orderplaced.objects.filter(user=request.user).first()
 
     rand_num = random.randrange(1000, 100000)
-    template = loader.get_template('invoice.html')
-    html = template.render({'data': data, 'totalamount': totalamount, 'cus': cus, 'rand_num': rand_num})
-    options = {
-        'page-size': 'Letter',
-        'encoding': "UTF-8",
-    }
-    # convert into pdf
-    pdf = pdfkit.from_string(html, False, options)
+    template = get_template('invoice.html')
 
-    response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment'
+    context = {'data': data, 'totalamount': totalamount, 'cus': cus, 'rand_num': rand_num }
+
+    html = template.render(context)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)  # , link_callback=fetch_resources)
+    pdf = result.getvalue()
+
+    filename = 'Invoice.pdf'
+    to_emails = [request.user,]
+    subject = "Invoice of your purchase"
+    email = EmailMessage(subject, "this is the invoice of your purchase which you u buy from our website thank u..", from_email=settings.EMAIL_HOST_USER, to=to_emails)
+    email.attach(filename, pdf, "application/pdf")
+    email.send(fail_silently=False)
 
 
-
-    return response
+    return HttpResponse(result.getvalue(), content_type='application/pdf')
 

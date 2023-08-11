@@ -7,4 +7,3 @@ app/__init__.py
 app/admin.py
 app/apps.py
 app/tests.py
-app/migrations
