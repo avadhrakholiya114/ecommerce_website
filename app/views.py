@@ -161,16 +161,20 @@ def update(request, id):
 
 @login_required(login_url="/login_user/")
 def addtocart(request, id):
-    user = request.user
-    pro = product.objects.get(id=id)
-    che = cart.objects.filter(product__id=id)
-    if che:
-        messages.warning(request, "Cart Already Exists")
-        return redirect('/show_cart/')
+   user = request.user
+    product_instance = product.objects.get(id=id)
+
+    # Check if the same product exists in the cart for the current user
+    cart_item_exists = cart.objects.filter(user=user, product__id=id).exists()
+
+    if cart_item_exists:
+        messages.warning(request, "Item already in the cart.")
     else:
-        cart(user=user, product=pro).save()
-        messages.success(request, "Cart Item Added Successfully")
-        return redirect('/show_cart/')
+        # If the item is not in the cart, add it
+        cart.objects.create(user=user, product=product_instance)
+        messages.success(request, "Item added to the cart successfully.")
+
+    return redirect('/show_cart/')
 
 
 @login_required(login_url="/login_user/")
